@@ -32,41 +32,23 @@ chrome.runtime.onInstalled.addListener(async () => {
 });
 
 
-chrome.tabs.onUpdated.addListener(async () => {
+chrome.tabs.onUpdated.addListener(async (_, { status }) => {
     let [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
     if (tab?.url) {
         const href = new URL(tab.url).href;
         console.log(href)
+        console.log(status)
 
         // home page of synerion
-        if (href === 'https://att.synerioncloud.com/SynerionWeb/#/controlPanel') {
+        if (href === 'https://att.synerioncloud.com/SynerionWeb/#/controlPanel' && status === 'complete') {
             const cookieValue = (await chrome.cookies.get({ name: '.ASPXAUTH', url: 'https://att.synerioncloud.com' })).value;
             console.log(cookieValue)
 
             await chrome.scripting.executeScript({
                 target: { tabId: tab.id, allFrames: true },
-                func: () => {
-                    const element =`
-                    <div id="s2e" class="control-panel-widgets-regoin">
-                        <div class="control-panel-widget-title">
-                            <div class="control-panel-widget-main-title">
-                                חישוב שעות החודש
-                            </div>
-                        </div>
-                    <div>`
-
-                    if (!document.getElementById('s2e')) {
-                        document.getElementsByClassName('main-content')[0].innerHTML += element
-                    }
-
-
-                }
+                files: ['synerion.js']                
             })
-
-
-
         }
-
     }
-
 })
+
