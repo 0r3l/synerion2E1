@@ -1,0 +1,15 @@
+{
+  "name": "Synerion to E1",
+  "manifest_version": 3,
+  "version": "1.0",
+  "permissions": [
+    "cookies",
+    "scripting"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  }
+}
