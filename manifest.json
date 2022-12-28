@@ -7,7 +7,7 @@
     "scripting"
   ],
   "host_permissions": [
-    "<all_urls>"
+    "https://att.synerioncloud.com/"
   ],
   "background": {
     "service_worker": "background.js"
