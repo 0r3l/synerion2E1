@@ -36,17 +36,23 @@ chrome.tabs.onUpdated.addListener(async (_, { status }) => {
     let [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
     if (tab?.url) {
         const href = new URL(tab.url).href;
+
         console.log(href)
-        console.log(status)
 
         // home page of synerion
         if (href === 'https://att.synerioncloud.com/SynerionWeb/#/controlPanel' && status === 'complete') {
-            const cookieValue = (await chrome.cookies.get({ name: '.ASPXAUTH', url: 'https://att.synerioncloud.com' })).value;
-            console.log(cookieValue)
-
+            console.log('enter Synerion')
             await chrome.scripting.executeScript({
                 target: { tabId: tab.id, allFrames: true },
-                files: ['synerion.js']                
+                files: ['common.js', 'synerion.js', 'config.js']
+            })
+        }
+
+        if (href === 'https://att.pvcloud.com/planview/ResourceAssignmentManager/ResourceManager.aspx?ptab=RES_MGR&pt=RESOURCE&sc=632369' && status === 'complete') {
+            console.log('enter E1')
+            await chrome.scripting.executeScript({
+                target: { tabId: tab.id, allFrames: true },
+                files: ['common.js', 'e1.js']
             })
         }
     }

@@ -2,14 +2,36 @@
   "name": "Synerion to E1",
   "manifest_version": 3,
   "version": "1.0",
-  "permissions": [
-    "cookies",
+  "permissions": [  
     "scripting"
   ],
   "host_permissions": [
-    "https://att.synerioncloud.com/"
+    "https://att.synerioncloud.com/",
+    "https://att.pvcloud.com/"
   ],
   "background": {
     "service_worker": "background.js"
-  }
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://att.synerioncloud.com/*"
+      ],
+      "css": [
+        "style.css"
+      ],
+      "run_at": "document_start",
+      "js": []
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "matches": [
+        "https://att.synerioncloud.com/*"
+      ],
+      "resources": [
+        "config.js"
+      ]
+    }
+  ]
 }
