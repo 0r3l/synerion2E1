@@ -31,21 +31,33 @@ chrome.runtime.onInstalled.addListener(async () => {
     console.log(`Created tab ${tab.id}`);
 });
 
-
 chrome.tabs.onUpdated.addListener(async (_, { status }) => {
+    
     let [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
     if (tab?.url) {
         const href = new URL(tab.url).href;
+        
 
         console.log(href)
 
         // home page of synerion
         if (href === 'https://att.synerioncloud.com/SynerionWeb/#/controlPanel' && status === 'complete') {
             console.log('enter Synerion')
+
+            chrome.runtime.onMessage.addListener(
+                function (message, sender, sendResponse) {
+                    console.log(`${sender} ${JSON.stringify(message)}`);
+                    if(sender === 's2eStats'){
+                        chrome.storage.local.set({s2e: message})
+                    }
+                }
+            );
+
             await chrome.scripting.executeScript({
                 target: { tabId: tab.id, allFrames: true },
                 files: ['common.js', 'synerion.js', 'config.js']
             })
+
         }
 
         if (href === 'https://att.pvcloud.com/planview/ResourceAssignmentManager/ResourceManager.aspx?ptab=RES_MGR&pt=RESOURCE&sc=632369' && status === 'complete') {
@@ -54,6 +66,9 @@ chrome.tabs.onUpdated.addListener(async (_, { status }) => {
                 target: { tabId: tab.id, allFrames: true },
                 files: ['common.js', 'e1.js']
             })
+            const s2e = await chrome.storage.local.get('s2e')
+            console.log('sending stats ' +  JSON.stringify(s2e))
+            chrome.tabs.sendMessage(tab.id, s2e)
         }
     }
 })

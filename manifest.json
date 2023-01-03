@@ -3,7 +3,8 @@
   "manifest_version": 3,
   "version": "1.0",
   "permissions": [  
-    "scripting"
+    "scripting",
+    "storage"
   ],
   "host_permissions": [
     "https://att.synerioncloud.com/",
