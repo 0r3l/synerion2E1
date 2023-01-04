@@ -1,13 +1,107 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="en">
 
 <head>
-    <title>Synerion to E1</title>    
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Synerion 2 E1</title>
+    <meta name="description" content="Help Interwise users to feed their non working hours" />
+
+    <!--Google font-->
+    <link href="https://fonts.googleapis.com/css?family=K2D:300,400,500,700,800" rel="stylesheet">
+
+    <!-- Bootstrap CSS / Color Scheme -->
+    <link rel="stylesheet" href="css/bootstrap.css">
 </head>
 
-<body> 
-    <h1>Hello from Synerion to E1</h1>   
-    <script src="./hello.js"></script>
+<body>
+
+    <!--Header Section-->
+    <section class="pt-5 pb-6">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 d-flex flex-row align-items-center justify-content-between">
+                    <div class="heading-brand">Synerion 2 E1</div>
+                </div>
+            </div>
+            <div class="row mt-6">
+                <div class="col-md-8 mx-auto text-center">
+                    <h1>Calculate & Feed Your Non Working Hours Easily</h1>
+                    <p class="lead mb-5">make it simple to calculate and feed your non working hours in the end of each
+                        month</p>
+                    <a href="https://github.com/0r3l/synerion2E1" class="btn btn-success svg-icon">
+                        <em class="mr-2" data-feather="github"></em>
+                        View Source Code
+                    </a>
+                </div>
+            </div>
+            <div class="row mt-5">
+                <div class="col-md-9 mx-auto">
+                    <div class="code-window">
+                        <div class="dots">
+                            <div class="red"></div>
+                            <div class="orange"></div>
+                            <div class="green"></div>
+                        </div>
+                        <pre class="language-javascript line-numbers"><code class="language-javascript">
+    async function getNwh() {
+    const currentYear = new Date().getFullYear()
+    const currentMonth = new Date().getMonth() + 1
+    const attendance = await getAttendance(currentYear, currentMonth)
+    const codes = await getStatusCodes()
+    const mapped = attendance.DailyBrowserDtos.flatMap(a => a.InOuts.map(io => {
+
+        const { Id, Description } = codes.find(c => io.ReportingCode.Code === c.Id)
+        const { InOuts } = a
+        return {
+            Id,
+            Description,
+            ...InOuts
+        }
+    }))
+
+    const dict = timeNotWorked.reduce((acc, curr) => typeof curr === 'object' ? ({ ...curr, ...acc }) : ({ [curr]: 8, ...acc }), {})
+
+    const sum = mapped
+        .filter(m => dict[m.Id.toString()] > 0)
+        .map(m => dict[m.Id.toString()])
+        .reduce((acc, curr) => acc + curr)
+
+    return {
+        s2e: {
+            nwh: sum,
+            year: currentYear,
+            month: currentMonth,
+            daysInMonth: new Date(currentYear, currentMonth, 0).getDate()
+
+        }
+    }
+
+}</code></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!--footer-->
+    <footer class="py-5 bg-light">
+        <div class="container">        
+            <div class="row my-2">
+                <div class="col-md-4 mx-auto text-muted text-center small-xl">
+                    &copy; 2023 Orel Elya - All Rights Reserved
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="js/jquery-3.2.1.min.js"></script>
+    <script src="js/feather.min.js"></script>
+    <script src="js/prism.min.js"></script>
+    <script src="js/prism-line-numbers.min.js"></script>
+    <script src="js/hello.js"></script>
 </body>
 
 </html>
