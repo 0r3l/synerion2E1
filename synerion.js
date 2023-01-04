@@ -49,7 +49,7 @@
 
 async function getNwh() {
     const currentYear = new Date().getFullYear()
-    const currentMonth = new Date().getMonth() + 1
+    const currentMonth = (new Date().getMonth() + 1).toString().padStart(2, '0')
     const attendance = await getAttendance(currentYear, currentMonth)
     const codes = await getStatusCodes()
     const mapped = attendance.DailyBrowserDtos.flatMap(a => a.InOuts.map(io => {
@@ -84,18 +84,18 @@ async function getNwh() {
 
 
 async function getAttendance(currentYear, currentMonth) {
-    const daysInMonth = new Date(currentYear, currentMonth, 0).getDate()
+    const day = new Date().getDate().toString().padStart(2, '0')
 
     const res = await fetch("https://att.synerioncloud.com/SynerionWeb/api/DailyBrowser/Attendance", {
         "headers": {
             "accept": "application/json, text/plain, */*",
             "accept-language": "en-US,en;q=0.9,he;q=0.8",
-            "client-date-time": "2022-12-28T12:00:05.902",
+            "client-date-time": `${currentYear}-${currentMonth}-${day}T12:00:05.902`,
             "content-type": "application/json;charset=UTF-8",
             "sec-ch-ua": "\"Not?A_Brand\";v=\"8\", \"Chromium\";v=\"108\", \"Google Chrome\";v=\"108\""
         },
         "referrerPolicy": "no-referrer",
-        "body": `{"Employees":null, "SelectionMode":0,"DatePeriodSelection":{"AccumCode":4,"DateRange":{"From":"${currentYear}-${currentMonth}-01T00:00:00.000Z","To":"${currentYear}-${currentMonth}-${daysInMonth}T10:00:03.000Z"},"IsDateRange":false,"PeriodKey":202212},"FirstResult":0,"ItemsOnPage":35,"SortDescriptors":null,"Filters":null,"LoadEmployeeMode":1}`,
+        "body": `{"Employees":null, "SelectionMode":0,"DatePeriodSelection":{"AccumCode":4,"DateRange":{"From":"${currentYear}-${currentMonth}-01T00:00:00.000Z","To":"${currentYear}-${currentMonth}-${day}T10:00:03.000Z"},"IsDateRange":false,"PeriodKey":${currentYear}${currentMonth}},"FirstResult":0,"ItemsOnPage":35,"SortDescriptors":null,"Filters":null,"LoadEmployeeMode":1}`,
         "method": "POST",
         "mode": "cors",
         "credentials": "include"

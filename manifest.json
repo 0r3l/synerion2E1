@@ -1,7 +1,8 @@
 {
   "name": "Synerion to E1",
   "manifest_version": 3,
-  "version": "1.0",
+  "description": "Calculate & Feed Your Non Working Hours Easily",
+  "version": "1.1",
   "permissions": [  
     "scripting",
     "storage"
