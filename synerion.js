@@ -36,12 +36,8 @@
 
                     sendMessage('s2eStats',stats)
                                 
-
                 });
             }
-
-
-
         }
     })
 
