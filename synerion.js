@@ -74,7 +74,7 @@ async function getNwh() {
         s2e: {
             nwh: sum,
             year: currentYear,
-            month: currentMonth,
+            month: +currentMonth,
             daysInMonth: new Date(currentYear, currentMonth, 0).getDate()
 
         }

@@ -1,6 +1,6 @@
 /*global chrome*/
 async function sendMessage(from, s2e) {
-    chrome.runtime.sendMessage({ from, message: { s2e } })
+    chrome.runtime.sendMessage({ from, message: s2e  })
 }
 
 async function receiveMessage(callback) {

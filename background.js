@@ -45,10 +45,11 @@ chrome.tabs.onUpdated.addListener(async (_, { status }) => {
             console.log('enter Synerion')
 
             chrome.runtime.onMessage.addListener(
-                function (message, sender, sendResponse) {
-                    console.log(`${sender} ${JSON.stringify(message)}`);
-                    if(sender === 's2eStats'){
-                        chrome.storage.local.set({s2e: message})
+                function (message) {
+                    console.log(`${JSON.stringify(message)}`);
+                    if(message.from === 's2eStats'){
+                        console.log(`saving ${JSON.stringify(message.message)} to local storage`)
+                        chrome.storage.local.set(message.message)
                     }
                 }
             );
